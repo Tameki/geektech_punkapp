@@ -40,13 +40,21 @@ public class BeerListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof BeerListViewHolder) {
-            ((BeerListViewHolder) viewHolder).onBind(mData.get(i));
+            ((BeerListViewHolder) viewHolder).onBind(mData.get(i % mData.size()));
         }
     }
 
+    //100 % 3 = 1
+    //0 % 3 = 0
+    //1 % 3 = 1
+    //2 % 3 = 2
+    //3 % 3 = 0
+    //4 % 3 = 1
+    //5 % 3 = 2
+
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mData.size() * 10;
     }
 
     //endregion

@@ -31,6 +31,7 @@ public class BeerLocalDataSource implements BeerDataSource {
     @Override
     public void getBeerList(BeerListCallback callback) {
         //TODO: Implement fetch from DB
+        callback.onSuccess(new ArrayList<>());
     }
 
     @Override

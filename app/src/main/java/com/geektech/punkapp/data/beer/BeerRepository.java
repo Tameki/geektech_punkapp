@@ -38,6 +38,7 @@ public class BeerRepository implements BeerDataSource {
         if (INSTANCE == null) {
             INSTANCE = new BeerRepository(local, remote);
         }
+
         return INSTANCE;
     }
 
@@ -47,6 +48,26 @@ public class BeerRepository implements BeerDataSource {
 
     @Override
     public void getBeerList(BeerListCallback callback) {
+        if (mLocal != null) {
+            mLocal.getBeerList(callback);
+        }
+
+        if (mRemote != null) {
+            mRemote.getBeerList(new BeerListCallback() {
+                @Override
+                public void onSuccess(ArrayList<Beer> beers) {
+                    mLocal.setBeerList(beers);
+
+                    callback.onSuccess(beers);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    callback.onError(e);
+                }
+            });
+        }
+
         //TODO: Call remote data source, and write response data to local data source
     }
 

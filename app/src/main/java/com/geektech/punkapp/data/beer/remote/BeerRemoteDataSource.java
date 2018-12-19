@@ -31,6 +31,7 @@ public class BeerRemoteDataSource implements BeerDataSource {
     @Override
     public void getBeerList(BeerListCallback callback) {
         //TODO: Perform network call via #Retrofit client
+        callback.onSuccess(new ArrayList<>());
     }
 
     @Nullable

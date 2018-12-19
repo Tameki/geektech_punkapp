@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geektech.punkapp.R;
-import com.geektech.punkapp.data.RepositoryProvider;
+import com.geektech.punkapp.data.DataSourceProvider;
 import com.geektech.punkapp.data.beer.BeerDataSource;
 import com.geektech.punkapp.data.beer.model.Beer;
 import com.geektech.punkapp.presentation.beerlist.recycler.BeerListAdapter;
@@ -25,6 +25,19 @@ public class BeerListFragment extends Fragment {
 
     private RecyclerView mRecycler;
     private BeerListAdapter mAdapter;
+
+    private BeerDataSource.BeerListCallback mCallback =
+            new BeerDataSource.BeerListCallback() {
+        @Override
+        public void onSuccess(ArrayList<Beer> beers) {
+            updateData(beers);
+        }
+
+        @Override
+        public void onError(Exception e) {
+            //TODO: Show Toast on error
+        }
+    };
 
     //region Static
 
@@ -58,7 +71,7 @@ public class BeerListFragment extends Fragment {
     }
 
     private void loadBeerList(){
-        RepositoryProvider.getBeerSource()
+        DataSourceProvider.getBeerSource()
                 .getBeerList(new BeerDataSource.BeerListCallback() {
                     @Override
                     public void onSuccess(ArrayList<Beer> beers) {
@@ -67,7 +80,7 @@ public class BeerListFragment extends Fragment {
 
                     @Override
                     public void onError(Exception e) {
-                        //TODO: Show Toast on error
+                        //TODO: Show error #Toast
                     }
                 });
     }

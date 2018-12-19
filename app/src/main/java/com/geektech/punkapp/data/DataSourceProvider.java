@@ -9,7 +9,7 @@ import com.geektech.punkapp.data.beer.remote.BeerRemoteDataSource;
  * Created by askar on 12/15/18
  * with Android Studio
  */
-public class RepositoryProvider {
+public class DataSourceProvider {
     public static BeerDataSource getBeerSource(){
         return BeerRepository.getInstance(
                 BeerLocalDataSource.getInstance(),
