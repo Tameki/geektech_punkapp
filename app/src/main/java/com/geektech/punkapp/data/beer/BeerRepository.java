@@ -17,6 +17,8 @@ public class BeerRepository implements BeerDataSource {
     @Nullable
     private BeerDataSource mRemote;
 
+
+
     //region Constructor
 
     private BeerRepository(
@@ -47,6 +49,21 @@ public class BeerRepository implements BeerDataSource {
 
     @Override
     public void getBeerList(BeerListCallback callback) {
+        if (mRemote != null) {
+            mRemote.getBeerList(new BeerListCallback() {
+                @Override
+                public void onSuccess(ArrayList<Beer> beers) {
+                    callback.onSuccess(beers);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    callback.onError(e);
+                }
+            });
+        } else {
+            callback.onError(new Exception("Remote is null"));
+        }
         //TODO: Call remote data source, and write response data to local data source
     }
 

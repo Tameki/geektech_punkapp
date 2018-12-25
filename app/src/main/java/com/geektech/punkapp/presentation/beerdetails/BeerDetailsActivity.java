@@ -34,7 +34,7 @@ public class BeerDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //TODO: Create #BeerDetailsFragment instance and set it via #SupportFragmentManager
         if (savedInstanceState == null) {
-
+            getIntent().getIntExtra(EXTRA_BEER_ID, -1);
         }
     }
 }

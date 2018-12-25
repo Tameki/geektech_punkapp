@@ -15,7 +15,11 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO: Create #BeerListFragment instance and set it via #SupportFragmentManager
         if (savedInstanceState == null) {
+            BeerListFragment fragment = BeerListFragment.newInstance();
 
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.main_container, fragment)
+                    .commit();
         }
     }
 }
