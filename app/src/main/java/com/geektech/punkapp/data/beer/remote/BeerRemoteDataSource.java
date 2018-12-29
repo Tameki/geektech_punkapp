@@ -1,17 +1,15 @@
 package com.geektech.punkapp.data.beer.remote;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.geektech.punkapp.data.beer.BeerDataSource;
 import com.geektech.punkapp.data.beer.model.Beer;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Single;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -42,6 +40,7 @@ public class BeerRemoteDataSource implements BeerDataSource {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 
@@ -49,33 +48,22 @@ public class BeerRemoteDataSource implements BeerDataSource {
 
     //region Contract
 
+
     @Override
-    public void getBeerList(BeerListCallback callback) {
-        Call<ArrayList<Beer>> call = mClient.getBeerList(1, 50);
-
-        call.enqueue(new Callback<ArrayList<Beer>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Beer>> call, Response<ArrayList<Beer>> response) {
-                Log.d("ololo", "Response code " + response.code());
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        callback.onSuccess(response.body());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Beer>> call, Throwable t) {
-                Log.d("ololo", "Failure " + t.getMessage());
-                callback.onError(new Exception());
-            }
-        });
+    public Single<ArrayList<Beer>> getBeerList() {
+        return mClient.getBeerList(1, 50);
     }
 
     @Nullable
     @Override
-    public Beer getBeer(int id) {
-        return null;
+    public Single<Beer> getBeer(int id) {
+        return mClient.getBeer(id);
+    }
+
+    @Nullable
+    @Override
+    public Single<Beer> getRandomBeer() {
+        return mClient.getRandomBeer();
     }
 
     @Override

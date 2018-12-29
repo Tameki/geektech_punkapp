@@ -7,6 +7,8 @@ import com.geektech.punkapp.data.beer.model.Beer;
 
 import java.util.ArrayList;
 
+import io.reactivex.Single;
+
 /**
  * Created by askar on 12/15/18
  * with Android Studio
@@ -28,9 +30,10 @@ public class BeerLocalDataSource implements BeerDataSource {
 
     //region Contract
 
+
     @Override
-    public void getBeerList(BeerListCallback callback) {
-        //TODO: Implement fetch from DB
+    public Single<ArrayList<Beer>> getBeerList() {
+        return null;
     }
 
     @Override
@@ -40,8 +43,13 @@ public class BeerLocalDataSource implements BeerDataSource {
 
     @Nullable
     @Override
-    public Beer getBeer(int id) {
-        //TODO: Fetch target Beer info from db
+    public Single<Beer> getBeer(int id) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Single<Beer> getRandomBeer() {
         return null;
     }
 

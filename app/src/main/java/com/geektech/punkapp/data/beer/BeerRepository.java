@@ -1,10 +1,15 @@
 package com.geektech.punkapp.data.beer;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.geektech.punkapp.data.beer.model.Beer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by askar on 12/15/18
@@ -17,7 +22,7 @@ public class BeerRepository implements BeerDataSource {
     @Nullable
     private BeerDataSource mRemote;
 
-
+    private HashMap<Integer, Beer> mCache = new HashMap<>();
 
     //region Constructor
 
@@ -47,31 +52,40 @@ public class BeerRepository implements BeerDataSource {
 
     //region Contract
 
-    @Override
-    public void getBeerList(BeerListCallback callback) {
-        if (mRemote != null) {
-            mRemote.getBeerList(new BeerListCallback() {
-                @Override
-                public void onSuccess(ArrayList<Beer> beers) {
-                    callback.onSuccess(beers);
-                }
 
-                @Override
-                public void onError(Exception e) {
-                    callback.onError(e);
-                }
-            });
+    @Override
+    public Single<ArrayList<Beer>> getBeerList() {
+        if (mCache.isEmpty()) {
+            Log.d("ololo", "Fetch from remote");
+            if (mRemote != null) {
+                return mRemote.getBeerList()
+                        .map( beers -> {
+                            for (Beer beer : beers) {
+                                mCache.put(beer.getId(), beer);
+                            }
+                            return beers;
+                        });
+            }
         } else {
-            callback.onError(new Exception("Remote is null"));
+            Log.d("ololo", "Fetch from cache");
+            ArrayList<Beer> beers = new ArrayList<>();
+            beers.addAll(mCache.values());
+
+            return Single.just(beers);
         }
-        //TODO: Call remote data source, and write response data to local data source
+        return null;
     }
 
     @Nullable
     @Override
-    public Beer getBeer(int id) {
-        //TODO: Get beer from in memory cache or from local data source
-        return null;
+    public Single<Beer> getBeer(int id) {
+        return Single.just(mCache.get(id));
+    }
+
+    @Nullable
+    @Override
+    public Single<Beer> getRandomBeer() {
+        return mRemote.getRandomBeer();
     }
 
     @Override

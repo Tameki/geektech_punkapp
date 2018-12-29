@@ -7,20 +7,19 @@ import com.geektech.punkapp.data.beer.model.Beer;
 
 import java.util.ArrayList;
 
+import io.reactivex.Single;
+
 /**
  * Created by askar on 12/15/18
  * with Android Studio
  */
 public interface BeerDataSource {
 
-    void getBeerList(BeerListCallback callback);
+    Single<ArrayList<Beer>> getBeerList();
 
     void setBeerList(ArrayList<Beer> beers);
 
-    @Nullable Beer getBeer(int id);
+    @Nullable Single<Beer> getBeer(int id);
 
-    interface BeerListCallback{
-        void onSuccess(ArrayList<Beer> beers);
-        void onError(Exception e);
-    }
+    @Nullable Single<Beer> getRandomBeer();
 }

@@ -1,5 +1,6 @@
 package com.geektech.punkapp.presentation.beerlist;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,9 @@ import com.geektech.punkapp.presentation.beerlist.recycler.BeerListAdapter;
 import com.geektech.punkapp.presentation.beerlist.recycler.BeerListViewHolder;
 
 import java.util.ArrayList;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by askar on 12/15/18
@@ -81,19 +85,17 @@ public class BeerListFragment extends Fragment
         loadBeerList();
     }
 
+    @SuppressLint("CheckResult")
     private void loadBeerList() {
         RepositoryProvider.getBeerSource()
-                .getBeerList(new BeerDataSource.BeerListCallback() {
-                    @Override
-                    public void onSuccess(ArrayList<Beer> beers) {
-                        updateData(beers);
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        //TODO: Show Toast on error
-                        Log.e("ololo", e.getMessage(), e);
-                    }
+                .getBeerList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe( result -> {
+                    updateData(result);
+                    Log.d("ololo", "Result " + result.size());
+                }, error -> {
+                    Log.d("ololo", "Error " + error.getMessage());
                 });
     }
 
