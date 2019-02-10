@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#28343c</color>
+    <color name="colorPrimaryDark">#28343c</color>
+    <color name="colorAccent">#2eabff</color>
+
+    <color name="status_bar">#FFF</color>
+
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
+
+    <color name="main_text_color">#0d0d0d</color>
+    <color name="secondary_text_color">#505050</color>
 </resources>

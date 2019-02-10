@@ -32,9 +32,15 @@ public class BeerDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO: Create #BeerDetailsFragment instance and set it via #SupportFragmentManager
+
         if (savedInstanceState == null) {
             getIntent().getIntExtra(EXTRA_BEER_ID, -1);
+
+            BeerDetailsFragment fragment = BeerDetailsFragment.newInstance();
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(android.R.id.content, fragment)
+                    .commit();
         }
     }
 }
