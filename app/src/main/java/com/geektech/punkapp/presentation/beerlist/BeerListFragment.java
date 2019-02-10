@@ -7,18 +7,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.geektech.punkapp.R;
 import com.geektech.punkapp.data.RepositoryProvider;
-import com.geektech.punkapp.data.beer.BeerDataSource;
 import com.geektech.punkapp.data.beer.model.Beer;
 import com.geektech.punkapp.presentation.beerdetails.BeerDetailsActivity;
 import com.geektech.punkapp.presentation.beerlist.recycler.BeerListAdapter;
 import com.geektech.punkapp.presentation.beerlist.recycler.BeerListViewHolder;
+import com.geektech.util.ToastUtil;
 
 import java.util.ArrayList;
 
@@ -69,11 +68,7 @@ public class BeerListFragment extends Fragment
     //region Private
 
     private void init(View rootView) {
-        //TODO: Initialize Recycler and set Adapter
-        mAdapter = new BeerListAdapter(
-                new ArrayList(),
-                this
-        );
+        mAdapter = new BeerListAdapter(new ArrayList(), this);
 
         mRecycler = rootView.findViewById(R.id.fragment_beer_list_recycler);
         mRecycler.setLayoutManager(new LinearLayoutManager(
@@ -91,17 +86,20 @@ public class BeerListFragment extends Fragment
                 .getBeerList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe( result -> {
-                    updateData(result);
-                    Log.d("ololo", "Result " + result.size());
-                }, error -> {
-                    Log.d("ololo", "Error " + error.getMessage());
-                });
+                .subscribe(
+                        this::updateData,
+                        error -> showToast("Error " + error.getMessage())
+                );
     }
 
     private void updateData(ArrayList<Beer> beers) {
-        //TODO: Send beers data to mAdapter, call #setData()
         mAdapter.setData(beers);
+    }
+
+    private void showToast(String message) {
+        if (getContext() != null) {
+            ToastUtil.showShortToast(getContext(), message);
+        }
     }
 
     //endregion

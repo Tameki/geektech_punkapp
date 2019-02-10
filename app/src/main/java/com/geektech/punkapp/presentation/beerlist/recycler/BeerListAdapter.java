@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BeerListAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<Beer> mData;
+    private ArrayList<Beer> mBeers;
     private BeerListViewHolder.BeerVHClickListener mListener;
 
     //region Constructors
@@ -27,7 +27,7 @@ public class BeerListAdapter extends RecyclerView.Adapter {
             ArrayList data,
             BeerListViewHolder.BeerVHClickListener listener
     ){
-        this.mData = data;
+        this.mBeers = data;
         this.mListener = listener;
     }
 
@@ -46,13 +46,13 @@ public class BeerListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof BeerListViewHolder) {
-            ((BeerListViewHolder) viewHolder).onBind(mData.get(i));
+            ((BeerListViewHolder) viewHolder).onBind(mBeers.get(i));
         }
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mBeers.size();
     }
 
     //endregion
@@ -60,15 +60,17 @@ public class BeerListAdapter extends RecyclerView.Adapter {
     //region Public
 
     public void setData(List<Beer> data) {
-        mData.clear();
-        mData.addAll(data);
+        mBeers.clear();
+        mBeers.addAll(data);
         notifyDataSetChanged();
-        //TODO: Implement data set and call #notifyDataSetChanged()
     }
 
     @Nullable
     public Beer getBeer(int position) {
-        return null; //TODO: Implement beer instance return
+        if (position >= 0 && mBeers.size() > position) {
+            return mBeers.get(position);
+        }
+        return null;
     }
 
     //endregion

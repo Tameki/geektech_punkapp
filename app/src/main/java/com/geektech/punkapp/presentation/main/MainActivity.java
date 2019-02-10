@@ -13,7 +13,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TODO: Create #BeerListFragment instance and set it via #SupportFragmentManager
         if (savedInstanceState == null) {
             BeerListFragment fragment = BeerListFragment.newInstance();
 
